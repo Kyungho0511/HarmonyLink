@@ -1,4 +1,5 @@
 {
+  "homepage": "https://kyungho0511.github.io/harmonylink/",
   "name": "harmonylink",
   "private": true,
   "version": "0.0.0",
@@ -6,9 +7,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "gh-pages": "^5.0.0",
     "vite": "^4.4.5"
   },
   "dependencies": {
