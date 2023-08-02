@@ -85,6 +85,7 @@ gltfLoader.load('./mountain_landscape/scene.gltf', landscape => {
 })
 
 let harmonylink = null;
+let harmonylinkOn = false;
 const objects = [];
 gltfLoader.load('./harmonylink.glb', gltf => {
   gltf.scene.scale.set(8, 8, 8)
@@ -146,13 +147,16 @@ function handleWheelEvent(event) {
         ease: 'power2.inOut',
         y: '-= 1.6'
       })
-      const text = document.querySelector('.instruction__text')
-      text.classList.remove('visible')
+      const text = document.querySelector('.instruction__text');
+      text.classList.remove('visible');
+      point3.element.classList.add('invisible_signal');
     }
   } else if (scene.fog.density > 0.04) {
     scene.fog.density = 0.04;
-    point.element.classList.remove('invisible')
-    point.element.innerHTML = 'No signal <i class="fa-solid fa-x"></i>'
+    if (!harmonylinkOn) {
+      point.element.classList.remove('invisible');
+      point.element.innerHTML = 'No signal <i class="fa-solid fa-x"></i>'
+    }
     if (harmonylink.position.y < -1) {
       gsap.to(harmonylink.position, {
         duration: 1.5,
@@ -162,11 +166,11 @@ function handleWheelEvent(event) {
       window.setTimeout(() => {
         const text = document.querySelector('.instruction__text')
         text.classList.add('visible')
-      }, 1600)
+      }, 1600);
     }
   }
 
-  if (scene.fog.density > 0.015 && scene.fog.density < 0.04) {
+  if (scene.fog.density > 0.015 && scene.fog.density < 0.04 && !harmonylinkOn) {
     if (!document.querySelector('.invisible')) {
       point.element.classList.add('invisible')
     } else {
@@ -197,7 +201,6 @@ const orbitControls = new OrbitControls(camera, renderer.domElement);
 orbitControls.enabled = false;
 const dragControls = new DragControls(objects, camera, renderer.domElement)
 dragControls.transformGroup = true;
-let released = false;
 dragControls.addEventListener('dragstart', () => {
   document.querySelector('.instruction__text').classList.remove('visible')
 })
@@ -207,12 +210,14 @@ dragControls.addEventListener('dragend', () => {
   const smartphoneIntersect = raycaster.intersectObject(smartphone);
   const harmonylinkIntersect = raycaster.intersectObject(harmonylink);
   if (smartphoneIntersect.length && harmonylinkIntersect.length) {
-    point3.element.classList.remove('invisible_signal')
-    point.element.classList.add('invisible')
+    point3.element.classList.remove('invisible_signal');
+    point.element.classList.add('invisible');
+    harmonylinkOn = true;
   } else {
-    point3.element.classList.add('invisible_signal')
-    point.element.classList.remove('invisible')
-  }
+    point3.element.classList.add('invisible_signal');
+    point.element.classList.remove('invisible');
+    harmonylinkOn = false;
+  } 
 })
 
 /*
