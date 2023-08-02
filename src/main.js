@@ -43,7 +43,9 @@ camera.lookAt(scene.position);
 /*
   ===== RENDERER
 */
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({
+  antialias: true
+});
 // set the size
 renderer.setSize( WIDTH, HEIGHT );
 // set device pixel ratio
@@ -52,7 +54,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild( renderer.domElement );
 
 /*
-  ===== LIGHTING
+  ===== LIGHTING / HELPER
 */
 const axesHelper = new THREE.AxesHelper(5);
 axesHelper.position.set(0, 0, 0)
@@ -63,7 +65,7 @@ directionalLight.position.set(0, 5, -10)
 scene.add(ambientLight)
 scene.add(directionalLight)
 scene.add(directionalLightHelper)
-// scene.add(axesHelper)
+scene.add(axesHelper)
 
 /*
   ===== obejcts
@@ -105,13 +107,12 @@ plane.rotateY(Math.PI * 0.8)
 plane.position.set(-300, 0, 600)
 scene.add(plane)
 
-// Sphere to mark position
 const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(0.05),
-  new THREE.MeshBasicMaterial({ color: '#ff0000' })
+  new THREE.SphereGeometry(0.02),
+  new THREE.MeshBasicMaterial({ color: '#000000' })
 )
-sphere.position.set(0.5, 0.75, -1.9)
-// scene.add(sphere)
+sphere.position.set(2.5, 0.88, -2.34)
+scene.add(sphere)
 
 const point = { 
   position: new THREE.Vector3(2.95, 0.9, -1.9), 
@@ -136,48 +137,42 @@ container.addEventListener('wheel', handleWheelEvent)
 
 function handleWheelEvent(event) {
   const delta = Math.sign(event.deltaY) * 0.001;
-  scene.fog.density += delta
-  if (scene.fog.density < 0) {
-    scene.fog.density = 0;
-    point.element.classList.remove('invisible')
-    point.element.innerHTML = 'GSAPP-mobile <i class="fa-solid fa-signal"></i>'
-    if (harmonylink.position.y > -1) {
-      gsap.to(harmonylink.position, {
-        duration: 1.5,
-        ease: 'power2.inOut',
-        y: '-= 1.6'
-      })
-      const text = document.querySelector('.instruction__text');
-      text.classList.remove('visible');
-      point3.element.classList.add('invisible_signal');
+  if (delta > 0) {
+    scene.fog.density += delta
+    if (scene.fog.density > 0.04) {
+      scene.fog.density = 0.04;
+      if (!harmonylinkOn) {
+        point.element.classList.remove('invisible');
+        point.element.innerHTML = 'No signal <i class="fa-solid fa-x"></i>'
+        sphere.material.color.set('#ff0000') 
+      }
+      if (harmonylink.position.y < -1) {
+        gsap.to(harmonylink.position, {
+          duration: 1.5,
+          ease: 'power2.inOut',
+          y: '+= 1.6'
+        })
+        window.setTimeout(() => {
+          const text = document.querySelector('.instruction__text')
+          text.classList.add('visible')
+        }, 1600);
+      }
+  
+      // prompts handling
+      if (harmonylinkOn) {
+        
+      }
     }
-  } else if (scene.fog.density > 0.04) {
-    scene.fog.density = 0.04;
-    if (!harmonylinkOn) {
-      point.element.classList.remove('invisible');
-      point.element.innerHTML = 'No signal <i class="fa-solid fa-x"></i>'
+  
+    if (scene.fog.density > 0.015 && scene.fog.density < 0.04 && !harmonylinkOn) {
+      if (!document.querySelector('.invisible')) {
+        point.element.classList.add('invisible')
+      } else {
+        point.element.classList.remove('invisible')
+      }
     }
-    if (harmonylink.position.y < -1) {
-      gsap.to(harmonylink.position, {
-        duration: 1.5,
-        ease: 'power2.inOut',
-        y: '+= 1.6'
-      })
-      window.setTimeout(() => {
-        const text = document.querySelector('.instruction__text')
-        text.classList.add('visible')
-      }, 1600);
-    }
+    event.preventDefault()
   }
-
-  if (scene.fog.density > 0.015 && scene.fog.density < 0.04 && !harmonylinkOn) {
-    if (!document.querySelector('.invisible')) {
-      point.element.classList.add('invisible')
-    } else {
-      point.element.classList.remove('invisible')
-    }
-  }
-  event.preventDefault()
 }
 
 /**
@@ -213,10 +208,12 @@ dragControls.addEventListener('dragend', () => {
     point3.element.classList.remove('invisible_signal');
     point.element.classList.add('invisible');
     harmonylinkOn = true;
+    sphere.material.color.set('#00ff00')
   } else {
     point3.element.classList.add('invisible_signal');
     point.element.classList.remove('invisible');
     harmonylinkOn = false;
+    sphere.material.color.set('#ff0000')    
   } 
 })
 
