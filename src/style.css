@@ -25,12 +25,12 @@ html, body {
     font-size: large;
     padding: 16px;
     color: white;
-    opacity: 0;
-    transition: all 300ms ease;
+    text-align: center;
   }
 
   .instruction {
     pointer-events: none;
+    opacity: 0;
   }
 
   .visible {
@@ -43,4 +43,41 @@ html, body {
 
   .invisible_signal {
     opacity: 0;
+  }
+
+  .prompt {
+    width: 220px;
+    margin-top: 30px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .feedback {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .feedback__title {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 80px;
+    color: white;
+  }
+
+  .feedback__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    color: white
   }

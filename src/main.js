@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 
 const container = document.querySelector('#scene-container');
+const harmonylinkSignal = document.querySelector('.harmonylink_signal');
 
 /*
   ===== GLOBAL VARIABLES
@@ -65,7 +66,7 @@ directionalLight.position.set(0, 5, -10)
 scene.add(ambientLight)
 scene.add(directionalLight)
 scene.add(directionalLightHelper)
-scene.add(axesHelper)
+// scene.add(axesHelper)
 
 /*
   ===== obejcts
@@ -115,7 +116,7 @@ sphere.position.set(2.5, 0.88, -2.34)
 scene.add(sphere)
 
 const point = { 
-  position: new THREE.Vector3(2.95, 0.9, -1.9), 
+  position: new THREE.Vector3(3, 0.9, -1.9), 
   element: document.querySelector('.signal') 
 }
 
@@ -127,7 +128,7 @@ const point2 = {
 
 // harmonylink signal
 const point3 = {
-  position: new THREE.Vector3(2.95, 0.9, -1.9),
+  position: new THREE.Vector3(3, 0.9, -1.9),
   element: document.querySelector('.harmonylink_signal')
 }
 
@@ -135,9 +136,27 @@ const point3 = {
 scene.fog = new THREE.FogExp2('#fa9c1b', 0)
 container.addEventListener('wheel', handleWheelEvent)
 
+let smokeExperience1 = false; 
+let smokeExperience2 = false; 
+let smokeExperience3 = false; 
+let coping1 = false;
+let coping2 = false;
+let coping3 = false;
+let coping4 = false;
+let connection1 = false;
+let connection2 = false;
+let connection3 = false;
+let connection4 = false;
+let feedback = false;
+let response1 = false;
+let response2 = false;
+let response3 = false;
+let response4 = false;
+let experienceEnd = false;
+
 function handleWheelEvent(event) {
   const delta = Math.sign(event.deltaY) * 0.001;
-  if (delta > 0) {
+  if (delta > 0 && !experienceEnd) {
     scene.fog.density += delta
     if (scene.fog.density > 0.04) {
       scene.fog.density = 0.04;
@@ -153,15 +172,125 @@ function handleWheelEvent(event) {
           y: '+= 1.6'
         })
         window.setTimeout(() => {
-          const text = document.querySelector('.instruction__text')
-          text.classList.add('visible')
+          document.querySelector('.instruction').classList.add('visible')
         }, 1600);
       }
   
       // prompts handling
-      if (harmonylinkOn) {
-        
+      if (harmonylinkOn && !smokeExperience1) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction2').classList.add('hidden');
+          document.querySelector('.instruction3').classList.remove('hidden');
+          document.querySelector('.smokeExperience1').classList.remove('hidden');
+          smokeExperience1 = true;
+        }, 1000);
       }
+      if (smokeExperience1 && !smokeExperience2) {
+        window.setTimeout(() => {
+          document.querySelector('.smokeExperience1').classList.add('hidden');
+          document.querySelector('.smokeExperience2').classList.remove('hidden');
+          smokeExperience2 = true;
+        }, 1000);
+      }
+      if (smokeExperience2 && !smokeExperience3) {
+        window.setTimeout(() => {
+          document.querySelector('.smokeExperience2').classList.add('hidden');
+          document.querySelector('.smokeExperience3').classList.remove('hidden');
+          smokeExperience3 = true;
+        }, 1000);
+      }
+      if (smokeExperience3 && !response1) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction3').classList.add('hidden');
+          document.querySelector('.instruction4').classList.remove('hidden');
+          document.querySelector('.smokeExperience3').classList.add('hidden');
+          response1 = true;
+        }, 1000);
+      }
+
+      if (response1 && !coping1) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction4').classList.add('hidden');
+          document.querySelector('.instruction3').classList.remove('hidden');
+          document.querySelector('.coping1').classList.remove('hidden');
+          coping1 = true;
+        }, 1000);
+      }
+      if (coping1 && !coping2) {
+        window.setTimeout(() => {
+          document.querySelector('.coping1').classList.add('hidden');
+          document.querySelector('.coping2').classList.remove('hidden');
+          coping2 = true;
+        }, 1000);
+      }
+      if (coping2 && !coping3) {
+        window.setTimeout(() => {
+          document.querySelector('.coping2').classList.add('hidden');
+          document.querySelector('.coping3').classList.remove('hidden');
+          coping3 = true;
+        }, 1000);
+      }
+      if (coping3 && !coping4) {
+        window.setTimeout(() => {
+          document.querySelector('.coping3').classList.add('hidden');
+          document.querySelector('.coping4').classList.remove('hidden');
+          coping4 = true;
+        }, 1000);
+      }
+      if (coping4 && !response2) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction3').classList.add('hidden');
+          document.querySelector('.instruction4').classList.remove('hidden');
+          document.querySelector('.coping4').classList.add('hidden');
+          response2 = true;
+        }, 1000);
+      }             
+      
+      if (response2 && !connection1) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction4').classList.add('hidden');
+          document.querySelector('.instruction3').classList.remove('hidden');
+          document.querySelector('.connection1').classList.remove('hidden');
+          connection1 = true;
+        }, 1000);
+      }
+      if (connection1 && !connection2) {
+        window.setTimeout(() => {
+          document.querySelector('.connection1').classList.add('hidden');
+          document.querySelector('.connection2').classList.remove('hidden');
+          connection2 = true;
+        }, 1000);
+      }
+      if (connection2 && !connection3) {
+        window.setTimeout(() => {
+          document.querySelector('.connection2').classList.add('hidden');
+          document.querySelector('.connection3').classList.remove('hidden');
+          connection3 = true;
+        }, 1000);
+      }
+      if (connection3 && !connection4) {
+        window.setTimeout(() => {
+          document.querySelector('.connection3').classList.add('hidden');
+          document.querySelector('.connection4').classList.remove('hidden');
+          connection4 = true;
+        }, 1000);
+      }
+      if (connection4 && !response3) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction3').classList.add('hidden');
+          document.querySelector('.instruction4').classList.remove('hidden');
+          document.querySelector('.connection4').classList.add('hidden');
+          response3 = true;
+        }, 1000);
+      } 
+      
+      if (response3 && !experienceEnd) {
+        window.setTimeout(() => {
+          document.querySelector('.instruction4').classList.add('hidden');
+          document.querySelector('.feedback').classList.remove('hidden');
+          experienceEnd = true;
+        }, 1000);
+      }  
     }
   
     if (scene.fog.density > 0.015 && scene.fog.density < 0.04 && !harmonylinkOn) {
@@ -196,9 +325,6 @@ const orbitControls = new OrbitControls(camera, renderer.domElement);
 orbitControls.enabled = false;
 const dragControls = new DragControls(objects, camera, renderer.domElement)
 dragControls.transformGroup = true;
-dragControls.addEventListener('dragstart', () => {
-  document.querySelector('.instruction__text').classList.remove('visible')
-})
 dragControls.addEventListener('dragend', () => {
   // Cast a ray
   raycaster.setFromCamera(mouse, camera)
@@ -209,6 +335,8 @@ dragControls.addEventListener('dragend', () => {
     point.element.classList.add('invisible');
     harmonylinkOn = true;
     sphere.material.color.set('#00ff00')
+    document.querySelector('.instruction1').classList.add('hidden');
+    document.querySelector('.instruction2').classList.remove('hidden');
   } else {
     point3.element.classList.add('invisible_signal');
     point.element.classList.remove('invisible');
